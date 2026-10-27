@@ -43,7 +43,7 @@ docker build -t mt5 .
 3. Run the Docker image:
 
 ```bash
-docker run -d -p 3000:3000 -p 8001:8001 -v config:/config mt5
+docker run -d -p 3000:3000 -p 4894:4894 -v config:/config mt5
 ```
 
 Now you can access MetaTrader5 via a web browser at localhost:3000.
@@ -78,7 +78,7 @@ services:
       - ./config:/config
     ports:
       - 3000:3000
-      - 8001:8001
+      - 4894:4894
     environment:
       - CUSTOM_USER=<Choose a user>
       - PASSWORD=<Choose a secure password>
@@ -110,7 +110,7 @@ services:
       - mt5_config:/config
     ports:
       - 3000:3000
-      - 8001:8001
+      - 4894:4894
     environment:
       - CUSTOM_USER=<Choose a user>
       - PASSWORD=<Choose a secure password>
@@ -159,7 +159,7 @@ This is a simple snippet to run your Python script fron any host
 
 ```python
 from mt5linux import MetaTrader5
-mt5 = MetaTrader5(host='host running docker container',port=8001)
+mt5 = MetaTrader5(host='host running docker container',port=4894)
 mt5.initialize()
 print(mt5.version())
 ```
@@ -171,7 +171,7 @@ Output should be something like this:
 Python 3.10.13 (main, Dec 26 2023, 20:21:41) [GCC 13.2.0] on linux
 Type "help", "copyright", "credits" or "license" for more information.
 >>> from mt5linux import MetaTrader5
->>> mt5 = MetaTrader5(host='192.168.1.10',port=8001)
+>>> mt5 = MetaTrader5(host='192.168.1.10',port=4894)
 >>> mt5.initialize()
 True
 >>> print(mt5.version())
@@ -199,7 +199,7 @@ services:
       - mt5_config:/config
     ports:
       - 3000:3000
-      - 8001:8001
+      - 4894:4894
     environment:
       - CUSTOM_USER=<Choose a user>
       - PASSWORD=<Choose a secure password>
@@ -212,7 +212,7 @@ volumes:
 Example using docker run:
 
 ```bash
-docker run -d -p 3000:3000 -p 8001:8001 \
+docker run -d -p 3000:3000 -p 4894:4894 \
   -e MT5_CMD_OPTIONS="/config:C:\\customized_for_tester_etc.ini" \
   -v mt5_config:/config \
   gmag11/metatrader5_vnc
