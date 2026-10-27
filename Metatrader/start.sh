@@ -6,6 +6,7 @@ WINEPREFIX='/config/.wine'
 WINEDEBUG='-all'
 wine_executable="wine"
 metatrader_version="5.0.36"
+mt5linux_version="0.1.9"
 mt5server_port="8001"
 MT5_CMD_OPTIONS="${MT5_CMD_OPTIONS:-}"
 mono_url="https://dl.winehq.org/wine/wine-mono/10.3.0/wine-mono-10.3.0-x86.msi"
@@ -109,9 +110,12 @@ if ! is_wine_python_package_installed "python-dateutil"; then
 fi
 
 # Install mt5linux library in Linux if not installed
+# Pinned to 0.1.9: mt5linux 1.1.x needs Python 3.12+ (Debian bookworm ships 3.11)
+# and replaced the "python -m mt5linux <python.exe> -w wine" launcher used below.
 show_message "[6/7] Checking and installing mt5linux library in Linux if necessary"
-if ! is_python_package_installed "mt5linux"; then
-    pip install --break-system-packages --no-cache-dir --no-deps mt5linux && \
+# Compare the version only: pkg_resources.require would also fail on 0.1.9's strict dependency pins.
+if [ "$(python3 -c "from importlib.metadata import version; print(version('mt5linux'))" 2>/dev/null)" != "$mt5linux_version" ]; then
+    pip install --break-system-packages --no-cache-dir --no-deps mt5linux==$mt5linux_version && \
     pip install --break-system-packages --no-cache-dir rpyc plumbum numpy
 fi
 
